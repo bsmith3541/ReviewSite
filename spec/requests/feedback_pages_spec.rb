@@ -15,9 +15,11 @@ describe "Feedback pages", :type => :feature do
   describe "new" do
     before do
       @current_ac = FactoryGirl.create(:associate_consultant)
-      @current_review = FactoryGirl.create(:review, :associate_consultant => @current_ac)
+      @current_review = FactoryGirl.create(:review,
+        :associate_consultant => @current_ac)
       @new_user = FactoryGirl.create(:user)
-      @invitation = FactoryGirl.create(:invitation, :email => @new_user.email, :review => @current_review)
+      @invitation = FactoryGirl.create(:invitation,
+        :email => @new_user.email, :review => @current_review)
     end
 
     describe "if no existing feedback", js: true do
@@ -25,7 +27,6 @@ describe "Feedback pages", :type => :feature do
         sign_in @new_user
         visit new_review_feedback_path(@current_review)
         page.find("#ui-accordion-accordion-header-9").click
-
         inputs.each do |field, value|
           fill_in field, with: value
         end
@@ -36,7 +37,8 @@ describe "Feedback pages", :type => :feature do
         page.should have_selector(".flash")
 
         feedback = Feedback.last
-        current_path.should == edit_review_feedback_path(@current_review, feedback)
+        current_path.should == edit_review_feedback_path(@current_review,
+          feedback)
         feedback.submitted.should be_false
 
         inputs.each do |field, value|
@@ -45,7 +47,8 @@ describe "Feedback pages", :type => :feature do
         end
       end
 
-      it "saves as final and sends email if 'Submit Final' is clicked", js: true do
+      it "saves as final and sends email if 'Submit Final' is clicked",
+        js: true do
         ActionMailer::Base.deliveries.clear
 
         page.evaluate_script('window.confirm = function() { return true; }')
@@ -88,7 +91,8 @@ describe "Feedback pages", :type => :feature do
 
         it "reloads saved feedback" do
           inputs.each do |field, value|
-            if ['feedback_project_worked_on', 'feedback_role_description'].include?(field)
+            if ['feedback_project_worked_on',
+                'feedback_role_description'].include?(field)
               page.should have_field(field, with: value)
             else
               page.should have_selector('#'+field, text: value)
@@ -121,7 +125,8 @@ describe "Feedback pages", :type => :feature do
 
         it "should redirect to homepage" do
           current_path.should == root_path
-          page.should have_selector('.flash-alert', text:"You are not authorized to access this page.")
+          page.should have_selector('.flash-alert',
+            text:"You are not authorized to access this page.")
         end
       end
     end
@@ -134,7 +139,8 @@ describe "Feedback pages", :type => :feature do
 
       it "should redirect to homepage" do
         current_path.should == root_path
-        page.should have_selector('.flash-alert', text:"You are not authorized to access this page.")
+        page.should have_selector('.flash-alert',
+          text:"You are not authorized to access this page.")
       end
     end
   end
@@ -261,7 +267,8 @@ describe "Feedback pages", :type => :feature do
 
         it "redirects to homepage" do
           current_path.should == root_path
-          page.should have_selector('.flash-alert', text:"You are not authorized to access this page.")
+          page.should have_selector('.flash-alert',
+            text:"You are not authorized to access this page.")
         end
       end
     end
@@ -331,7 +338,8 @@ describe "Feedback pages", :type => :feature do
 
         it "redirects to homepage" do
           current_path.should == root_path
-          page.should have_selector('.flash-alert', text:"You are not authorized to access this page.")
+          page.should have_selector('.flash-alert',
+            text:"You are not authorized to access this page.")
         end
       end
     end

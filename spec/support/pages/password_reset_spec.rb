@@ -13,9 +13,8 @@ feature 'Password Reset' do
 
   describe "basic page" do
     it "should have the correct title" do
-      pry
-      page.should have_full_title
-      # page.title.should == "Review Site | Request Password Reset"
+      # page.should have_full_title
+      page.title.should == "Review Site | Request Password Reset"
     end
 
     it "should have the correct heading" do
