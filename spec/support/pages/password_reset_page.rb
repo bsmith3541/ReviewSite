@@ -8,6 +8,7 @@ class PasswordResetPage < SitePrism::Page
   element :request_button, "div.actions input[value='Request Password Reset']"
   element :flash_message, ".flash"
   element :error_message, "section.flash-alert"
+  element :notice_message, ".flash.flash-notice"
   section :okta_form, OktaSection, "section#okta-input"
 
   def submit_email(email)

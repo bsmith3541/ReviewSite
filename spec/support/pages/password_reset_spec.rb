@@ -6,71 +6,69 @@ feature 'Password Reset' do
   let(:page) { PasswordResetPage.new }
   let(:user) { FactoryGirl.create(:user,
     password_digest: BCrypt::Password.create("password")) }
+  let (:signin_page) { SignInPage.new }
 
   before do
     page.load
   end
 
   describe "basic page" do
-    it "should have the correct title" do
+    it "displays the correct title" do
       # page.should have_full_title
       page.title.should == "Review Site | Request Password Reset"
     end
 
-    it "should have the correct heading" do
+    it "displays the correct heading" do
       page.should have_heading
     end
   end
 
-  describe "requesting a new password" do
+  feature "requesting a new password" do
     before do
       page.okta_form.change_okta_user("askjdh")
       page.load
     end
 
-    context "when an invalid email is entered" do
+    context "with an invalid email" do
       before do
         @result = page.submit_email("")
       end
 
-      it "should display an error message" do
+      it "displays an error message" do
         @result.should have_flash_error_message
       end
     end
 
-    context "when a valid email is entered" do
-      it "should send an email" do
+    context "with a valid email" do
+      it "sends an email" do
         UserMailer.should_receive(:password_reset).with(user).and_return(double("mailer", :deliver => true))
         page.submit_email(user.email)
       end
 
-      it "should redirect to the sign in page" do
+      it "redirects to the sign in page" do
         page.submit_email(user.email)
-        @signin = SignInPage.new
-        @signin.should be_displayed
-        @signin.should have_heading
+        signin_page.should be_displayed
       end
 
-      it "should display a flash message" do
-        @signin = page.submit_email(user.email)
-        @signin.should have_notice_message
+      it "displays a flash message" do
+        page.submit_email(user.email)
+
+        signin_page.should have_notice_message
       end
     end
+  end
 
-    context "when the user signs in" do
+  context "signing in before changing the password" do
+    before do
+      page.submit_email(user.email)
+      # @signin = SignInPage.new
+    end
 
-      let(:signin_page) { SignInPage.new }
-
-      before do
-        page.submit_email(user.email)
-        @signin = SignInPage.new
-      end
-
-      describe "with valid information" do
-        it "should retain their original password" do
-          result = @signin.log_in(user.email, "password")
-          result.should have_selector("h1", text: "Upcoming Reviews")
-        end
+    describe "with valid information" do
+      it "retains the original password" do
+        # result = @signin.log_in(user.email, "password")
+        result = signin_page.log_in(user.email, "password")
+        result.should have_selector("h1", text: "Upcoming Reviews")
       end
     end
   end
