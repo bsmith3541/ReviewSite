@@ -46,6 +46,9 @@ group :development, :test do
   gem 'guard-rspec', '0.5.5'
   gem 'pry'
   gem 'pry-nav'
+  gem 'jasmine-rails'
+  gem 'guard-jasmine'
+  gem 'jasmine-jquery-rails'
 end
 
 group :test do

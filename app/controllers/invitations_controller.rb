@@ -15,6 +15,7 @@ class InvitationsController < ApplicationController
     for email in params[:emails].split(",").map{ |email| email.strip.downcase } do
       @invitation = @review.invitations.build(email: email)
       if @invitation.save and email.include? "thoughtworks.com"
+        binding.pry
         if params[:no_email]
           flash[:success] = "An invitation has been created!"
         else
