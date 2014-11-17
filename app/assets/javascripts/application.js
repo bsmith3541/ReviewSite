@@ -81,4 +81,9 @@ jQuery (function () {
 
   $('.sidenav a[href^="' + location.pathname + '"]').first().parent().addClass("active");
 
+  $('#add-email').on('click', function(event) {
+    event.preventDefault();
+    $('.email-addresses').append("<li>" + $('#new-email').val() + "</li>");
+  })
+
 });
