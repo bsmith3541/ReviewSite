@@ -19,7 +19,8 @@ class Ability
     can [:read, :update, :destroy], Feedback, { :submitted => false, :user_id => user.id }
 
     can [:create, :new], Feedback do |feedback, review = ability_review |
-      !review.invitations.where(email: user.email).empty? || (review.associate_consultant.user.id == user.id)
+      !review.invitations.where(email: user.email).empty? || (review.associate_consultant.user.id == user.id) ||
+        !review.invitations.where(user.additional_emails.includes(:email)).empty?
     end
 
     can :additional, Feedback do |feedback, review = ability_review|
