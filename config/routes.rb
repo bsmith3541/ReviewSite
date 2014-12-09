@@ -56,6 +56,8 @@ ReviewSite::Application.routes.draw do
     get :completed_feedback, :on => :member
   end
 
+  devise_for :additional_emails
+
   get 'users/:id/add_email', to: 'users#add_email'
   get 'users/:id/remove_email', to: 'users#remove_email'
 
