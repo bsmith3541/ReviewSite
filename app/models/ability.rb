@@ -11,7 +11,7 @@ class Ability
 
     # baseline
     can :manage, SelfAssessment, :review => { :associate_consultant => { :user_id => user.id } }
-
+    can :manage, AdditionalEmail
     can :manage, Invitation, :review => { :associate_consultant => { :user_id => user.id } }
     can :manage, Invitation, :review => { :associate_consultant => { :coach_id => user.id } }
     can [:read, :destroy], Invitation, :email => user.email
